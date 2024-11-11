@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -24,7 +24,7 @@ import net.laurus.data.dto.client.BaseClientDto;
 import net.laurus.data.dto.system.SystemInfoDto;
 
 @Log
-@Component
+@Service
 public class ClientManagementService implements Runnable {
 
     // Use AtomicBoolean to ensure thread-safety when checking and modifying the healthy flag
@@ -34,13 +34,16 @@ public class ClientManagementService implements Runnable {
     private final Map<String, BaseClientDto> clientDataMap = new ConcurrentHashMap<>();
 
     private final ExecutorService threadPool;
+    
+    private final ClientQueueService queueService;
 
     @Value("${system.socket-port}")
     private int port;
 
     @Autowired
-    public ClientManagementService(ExecutorService threadPool) {
+    public ClientManagementService(ExecutorService threadPool, ClientQueueService queueService) {
         this.threadPool = threadPool;
+        this.queueService = queueService;
     }
 
     @PostConstruct
@@ -71,6 +74,7 @@ public class ClientManagementService implements Runnable {
                     BaseClientDto client = clientDataMap.computeIfAbsent(systemInfoDTO.getSystemHostName(),
                             key -> generateClient(systemInfoDTO)); // Generate new client if absent
                     client.update(systemInfoDTO); // Update the client with new data
+                    queueService.updateClient(client);
                     writer.println("OK-200"); // Acknowledge the client
                     log.info("Updated client: " + client);
                 } catch (Exception e) {

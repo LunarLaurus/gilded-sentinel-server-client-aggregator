@@ -1,4 +1,4 @@
-package net.laurus.rabbit.config;
+package net.laurus.config;
 
 import static net.laurus.rabbit.RabbitConstants.ALLOW_SERIALIZING_CLASSES;
 
@@ -38,7 +38,7 @@ public class RabbitConfig {
 
 	@Bean
 	public CachingConnectionFactory connectionFactory() {
-		CachingConnectionFactory factory = new CachingConnectionFactory(rabbitAddress); // Change to your RabbitMQ host
+		CachingConnectionFactory factory = new CachingConnectionFactory(rabbitAddress);
 		factory.setPort(rabbitPort);
 		factory.setUsername(rabbitUsername);
 		factory.setPassword(rabbitPassword);
