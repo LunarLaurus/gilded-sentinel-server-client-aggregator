@@ -1,0 +1,26 @@
+# Server configuration
+server:
+   ssl:
+      enabled: false
+      
+system:
+   obfuscate-secrets: true
+   allowed-ip: ${SYSTEM_ALLOWED_IP:localhost}
+
+# Spring configuration
+spring:
+   application:
+      name: Gilded-Sentinel-Client-Aggregator
+   jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: Europe/London
+   jms:
+      pub-sub-domain: true
+   http:
+      converters:
+         preferred-json-mapper: jackson
+   rabbitmq:
+      host: ${SYSTEM_RABBITMQ_ADDRESS:192.168.0.9}
+      port: ${SYSTEM_RABBITMQ_PORT:5672}
+      username: ${SYSTEM_RABBITMQ_USER:ChangeMe}
+      password: ${SYSTEM_RABBITMQ_PASSWORD:ChangeMe}
