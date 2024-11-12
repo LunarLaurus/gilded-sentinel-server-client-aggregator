@@ -30,8 +30,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.laurus</groupId>
-			<artifactId>LaurusCore</artifactId>
-			<version>0.0.6</version>
+			<artifactId>laurus-core</artifactId>
+			<version>0.0.15</version>
 		</dependency>
 		<!-- Spring Boot Starter for RabbitMQ -->
 		<dependency>
