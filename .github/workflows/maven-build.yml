@@ -44,6 +44,8 @@ jobs:
   build:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     needs: bump-version
     outputs:
       tag: ${{ steps.create_tag.outputs.tag }}
