@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  bump-version:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  # Reusable step for common setup tasks
+  setup:
     runs-on: ubuntu-latest
     outputs:
-      java_version: ${{ steps.get_version.outputs.java_version }}
+      java_version: '21'  # Adjust this if necessary
 
     steps:
       - name: Checkout Code
@@ -23,6 +23,12 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
 
+  bump-version:
+    needs: setup
+    runs-on: ubuntu-latest
+    outputs:
+      java_version: ${{ steps.get_version.outputs.java_version }}
+    steps:
       - name: Get and Bump Java Version
         id: get_version
         run: |
@@ -42,15 +48,13 @@ jobs:
           git push origin ${{ github.ref }}
 
   build:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: bump-version
     runs-on: ubuntu-latest
     permissions:
       packages: read
-    needs: bump-version
     outputs:
       tag: ${{ steps.create_tag.outputs.tag }}
       jar_path: ${{ steps.build_maven.outputs.jar_path }}
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -61,6 +65,11 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
 
+      - name: Setup Maven Settings for GitHub Packages
+        run: |
+          mkdir -p ~/.m2
+          echo "<servers><server><id>github</id><username>${{ github.actor }}</username><password>${{ secrets.GITHUB_TOKEN }}</password></server></servers>" > ~/.m2/settings.xml
+
       - name: Build with Maven
         id: build_maven
         run: |
@@ -69,6 +78,8 @@ jobs:
           JAR_PATH=$(find target -name "*.jar" | head -n 1)
           echo "jar_path=$JAR_PATH" >> $GITHUB_ENV
           echo "jar_path=$JAR_PATH" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Git Tag
         id: create_tag
@@ -82,10 +93,8 @@ jobs:
           git push origin "$TAG"
 
   create-release:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
     needs: build
-
+    runs-on: ubuntu-latest
     steps:
       - name: Create GitHub Release
         id: create_release
@@ -95,6 +104,6 @@ jobs:
           files: ${{ needs.build.outputs.jar_path }}
           body: |
             ### New Release ${{ needs.build.outputs.tag }}
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
