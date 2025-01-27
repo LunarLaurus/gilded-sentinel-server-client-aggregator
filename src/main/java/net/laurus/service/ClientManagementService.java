@@ -45,8 +45,8 @@ public class ClientManagementService {
     }
 
     public void storeLmSensorsClient(RustClientData clientDto) {
-        lmSensorsClients.put(clientDto.getHostName(), clientDto);
-        log.info("Stored lm-sensors client data: {}", clientDto.getHostName());
+        lmSensorsClients.put(clientDto.getSystemInfo().getHostname(), clientDto);
+        log.info("Stored lm-sensors client data: {}", clientDto.getSystemInfo().getHostname());
     }
 
     public void storeLibreHardwareClient(SystemInfoDto clientDto) {
