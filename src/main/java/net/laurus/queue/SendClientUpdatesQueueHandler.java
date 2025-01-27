@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.laurus.ilo.AuthenticatedIloClient;
-import net.laurus.ilo.UnauthenticatedIloClient;
+import net.laurus.data.dto.system.ClientCommonSystemDto;
 
 /**
  * Handles queue operations for sending updates to client queues.
@@ -23,27 +22,19 @@ import net.laurus.ilo.UnauthenticatedIloClient;
 @Slf4j
 @RequiredArgsConstructor
 public class SendClientUpdatesQueueHandler {
+	
+	private static final String QUEUE_NAME = "clientCommonSystemDtoQueue";
 
     private final RabbitTemplate rabbitQueue;
 
     /**
-     * Sends unauthenticated client data to the queue.
-     *
-     * @param clientObject The unauthenticated IloClient object to send.
-     */
-    public void sendUnauthenticatedIloClientData(UnauthenticatedIloClient clientObject) {
-        log.info("Updating UnauthenticatedIloClient: {}", clientObject);
-        send("unauthenticatedIloClientQueue", clientObject);
-    }
-
-    /**
      * Sends authenticated client data to the queue.
      *
-     * @param clientObject The authenticated IloClient object to send.
+     * @param client The authenticated IloClient object to send.
      */
-    public void sendAuthenticatedIloClientData(AuthenticatedIloClient clientObject) {
-        log.info("Updating AuthenticatedIloClient: {}", clientObject);
-        send("authenticatedIloClientQueue", clientObject);
+    public void sendClientData(ClientCommonSystemDto client) {
+        log.info("Placing data on queue: {}, client: {}", QUEUE_NAME, client);
+        send(QUEUE_NAME, client);
     }
 
     /**
