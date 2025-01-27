@@ -88,14 +88,14 @@ jobs:
       - name: Build and Push Versioned Docker Image
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
-          --tag ${{ secrets.DOCKER_USERNAME }}/gilded-sentinel-ilo-finder:${{ needs.bump-version.outputs.java_version }} \
+          --tag ${{ secrets.DOCKER_USERNAME }}/gilded-sentinel-client-manager:${{ needs.bump-version.outputs.java_version }} \
           --push .
 
       - name: Build and Push Latest Docker Image
         if: github.ref == 'refs/heads/main'
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
-          --tag ${{ secrets.DOCKER_USERNAME }}/gilded-sentinel-ilo-finder:latest \
+          --tag ${{ secrets.DOCKER_USERNAME }}/gilded-sentinel-client-manager:latest \
           --push .
 
   create-release:
@@ -112,7 +112,7 @@ jobs:
           body: |
             ### Docker Image
             The Docker image for this release is available at:
-            - [Docker Hub Image - ${{ needs.build.outputs.tag }}](https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/gilded-sentinel-ilo-finder/tags)
+            - [Docker Hub Image - ${{ needs.build.outputs.tag }}](https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/gilded-sentinel-client-manager/tags)
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
