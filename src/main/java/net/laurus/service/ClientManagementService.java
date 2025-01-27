@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -17,6 +18,10 @@ import net.laurus.data.dto.system.librehw.SystemInfoDto;
 @Slf4j
 @Service
 public class ClientManagementService {
+
+    private static final int SCAN_RATE_MS = 1000 * 60 * 5; // 5 minutes
+    
+    private static final int SCAN_INITIAL_DELAY_MS = 1000 * 5; // 5 seconds
 
     private final AtomicBoolean healthy = new AtomicBoolean(false);
 
@@ -56,5 +61,14 @@ public class ClientManagementService {
 
     public boolean isHealthy() {
         return healthy.get();
+    }
+    
+
+    @Scheduled(fixedRate = SCAN_RATE_MS, initialDelay = SCAN_INITIAL_DELAY_MS)
+    public void logClients() {
+    	log.info("Outputting saved client list.");
+    	esxiClients.values().forEach(c -> log.info("Esxi Client: {}", c));
+    	lmSensorsClients.values().forEach(c -> log.info("Rust Client: {}", c));
+    	librehardwareClients.values().forEach(c -> log.info("LibreHW Client: {}", c));
     }
 }
