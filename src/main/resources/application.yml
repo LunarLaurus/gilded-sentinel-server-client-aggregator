@@ -1,11 +1,11 @@
 # Server configuration
 server:
+   port: ${SYSTEM_SPRING_PORT:32560}
    ssl:
       enabled: false
       
 system:
    obfuscate-secrets: true
-   socket-port: 32500
    allowed-ip: ${SYSTEM_ALLOWED_IP:localhost}
 
 # Spring configuration

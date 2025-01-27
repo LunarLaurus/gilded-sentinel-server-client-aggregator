@@ -23,3 +23,8 @@
 hs_err_pid*
 replay_pid*
 /target/
+/.settings/org.eclipse.jdt.apt.core.prefs
+.classpath
+.classpath
+.project
+.settings/org.eclipse.jdt.core.prefs
