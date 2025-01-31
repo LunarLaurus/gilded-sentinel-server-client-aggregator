@@ -21,7 +21,7 @@ import net.laurus.data.dto.system.ClientCommonSystemDto;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class SendClientUpdatesQueueHandler {
+public class ClientQueueDispatcher {
 	
 	private static final String QUEUE_NAME = "clientCommonSystemDtoQueue";
 

@@ -15,7 +15,7 @@ import net.laurus.data.dto.system.ClientCommonSystemDto;
 import net.laurus.data.dto.system.esxi.EsxiSystemDataDto;
 import net.laurus.data.dto.system.librehw.SystemInfoDto;
 import net.laurus.data.dto.system.lmsensors.RustClientData;
-import net.laurus.queue.SendClientUpdatesQueueHandler;
+import net.laurus.queue.ClientQueueDispatcher;
 
 @Slf4j
 @Service
@@ -26,7 +26,7 @@ public class ClientManagementService {
     private static final int SCAN_INITIAL_DELAY_MS = 1000 * 5; // 5 seconds
     
     @Autowired
-    private SendClientUpdatesQueueHandler queue;
+    private ClientQueueDispatcher queue;
 
     @Getter
     private final Map<String, EsxiSystemDataDto> esxiClients = new ConcurrentHashMap<>();
@@ -84,5 +84,7 @@ public class ClientManagementService {
     	esxiClients.values().forEach(c -> log.info("Esxi Client: {}", c));
     	lmSensorsClients.values().forEach(c -> log.info("Rust Client: {}", c));
     	librehardwareClients.values().forEach(c -> log.info("LibreHW Client: {}", c));
+    	log.info("Common clients");
+    	commonClients.values().forEach(c -> log.info("Client: {}", c));
     }
 }
