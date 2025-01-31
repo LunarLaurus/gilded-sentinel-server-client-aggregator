@@ -73,7 +73,7 @@ public class ClientManagementService {
     }
 
     private void storeCommonClient(ClientCommonSystemDto common) {
-    	commonClients.put(common.getHostname(), common);
+    	commonClients.put(common.getOperatingSystem().getHostname(), common);
         log.info("Stored common client data: {}", common);
         queue.sendClientData(common);
     }
