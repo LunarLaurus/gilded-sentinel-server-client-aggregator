@@ -14,7 +14,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
-        <laurus.version>0.0.55</laurus.version>
+        <laurus.version>0.0.57</laurus.version>
     </properties>
     <!-- Repositories for dependencies -->
     <repositories>
@@ -33,12 +33,6 @@
             <groupId>net.laurus</groupId>
             <artifactId>laurus-core-spring</artifactId>
             <version>${laurus.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.laurus</groupId>
-                    <artifactId>lgtm-lib</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- Spring Boot Starter for RabbitMQ -->
         <dependency>
@@ -49,10 +43,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

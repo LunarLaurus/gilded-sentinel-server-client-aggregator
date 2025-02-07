@@ -1,15 +1,14 @@
 package net.laurus.queue;
 
-import static net.laurus.util.RabbitMqUtils.preparePayload;
+import static net.laurus.spring.service.RabbitQueueService.DEFAULT_QUEUE_CONFIG;
 
-import java.io.IOException;
-
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.laurus.data.dto.system.ClientCommonSystemDto;
+import net.laurus.spring.service.RabbitQueueService;
 
 /**
  * Handles queue operations for sending updates to client queues.
@@ -25,7 +24,15 @@ public class ClientQueueDispatcher {
 	
 	private static final String QUEUE_NAME = "clientCommonSystemDtoQueue";
 
-    private final RabbitTemplate rabbitQueue;
+
+	private final RabbitQueueService rabbitQueueService;
+	
+	@PostConstruct
+	public void setupQueues() {
+		if (!rabbitQueueService.doesQueueExist(QUEUE_NAME)){
+			rabbitQueueService.createQueue(QUEUE_NAME, DEFAULT_QUEUE_CONFIG);
+		}
+	}
 
     /**
      * Sends authenticated client data to the queue.
@@ -47,12 +54,7 @@ public class ClientQueueDispatcher {
      * @param clientObject The object to send, which will be serialized and compressed.
      */
     private void send(String queueName, Object clientObject) {
-        try {
-            byte[] compressedData = preparePayload(clientObject, true);
-            rabbitQueue.convertAndSend(queueName, compressedData);
-            log.debug("Successfully sent data to queue: {}", queueName);
-        } catch (IOException e) {
-            log.error("Error placing request on {}: {}", queueName, e.getMessage(), e);
-        }
+        rabbitQueueService.sendMessage(queueName, clientObject, true);
+		log.debug("Successfully sent data to queue: {}", queueName);
     }
 }

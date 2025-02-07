@@ -1,17 +1,17 @@
 package net.laurus;
 
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 import lombok.Getter;
 
-@SpringBootApplication(scanBasePackages = { "net.laurus" })
-@EnableScheduling
+@SpringBootApplication(scanBasePackages = { 
+		"net.laurus.app",
+		"net.laurus.controller",
+		"net.laurus.queue",
+		"net.laurus.service"})
 @EnableAsync
-@EnableRabbit
 @Getter
 public class ExecuteSpring {
 	
