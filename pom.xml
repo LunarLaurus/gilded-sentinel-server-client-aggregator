@@ -14,7 +14,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
-        <laurus.version>0.0.57</laurus.version>
+        <laurus.version>0.0.58</laurus.version>
     </properties>
     <!-- Repositories for dependencies -->
     <repositories>
