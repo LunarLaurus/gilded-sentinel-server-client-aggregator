@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.7_6-jdk
+FROM eclipse-temurin:25.0.1_8-jdk
 
 WORKDIR /gilded-sentinel-server-client-aggregator
 
